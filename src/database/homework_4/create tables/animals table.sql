@@ -1,0 +1,14 @@
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (1, 'Бобик', 'собака', null);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (2, 'Принц', 'собака', 3);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (3, 'Барон', 'кот', 1);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (4, 'Пушистик', 'кот', 2);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (5, 'Рыжик', 'кот', null);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (6, 'Джерри', 'мышь', 4);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (7, 'Никола', 'попугай', 4);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (8, 'Гарольд', 'мышь', null);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (9, 'Кинг', 'собака', 4);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (10, 'Ромео', 'хомяк', 3);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (11, 'Персик', 'кот', 1);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (12, 'Флай', 'попугай', 2);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (13, 'Дио', 'попугай', null);
+INSERT INTO animals_in_shelters.animals (animal_id, animal_name, species, shelter_id) VALUES (14, 'Шон', 'хомяк', 2);
