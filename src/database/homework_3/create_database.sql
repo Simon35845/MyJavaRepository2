@@ -1,0 +1,2 @@
+CREATE DATABASE people3;
+USE people3;
