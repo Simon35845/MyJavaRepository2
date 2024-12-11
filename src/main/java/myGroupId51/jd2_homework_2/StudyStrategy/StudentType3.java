@@ -1,6 +1,6 @@
 package myGroupId51.jd2_homework_2.StudyStrategy;
 
-import myGroupId51.jd2_homework_2.Student;
+import myGroupId51.jd2_homework_2.Students.Student;
 
 public class StudentType3 implements StudyStrategy {
     private static final int STUDY_TIME_MULTIPLIER = 3;

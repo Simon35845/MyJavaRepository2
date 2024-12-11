@@ -1,4 +1,4 @@
-package myGroupId51.jd2_homework_2;
+package myGroupId51.jd2_homework_2.Students;
 
 import myGroupId51.jd2_homework_2.FieldGenerators.StudentNameGenerator;
 import myGroupId51.jd2_homework_2.FieldGenerators.StudentTalentGenerator;
@@ -17,6 +17,10 @@ public class Student {
 
     public double getTalent() {
         return talent;
+    }
+
+    public void setTalent(double talent){
+        this.talent = talent;
     }
 
     public int getStudentType() {

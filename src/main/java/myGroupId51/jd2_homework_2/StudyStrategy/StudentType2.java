@@ -1,9 +1,9 @@
 package myGroupId51.jd2_homework_2.StudyStrategy;
 
-import myGroupId51.jd2_homework_2.Student;
+import myGroupId51.jd2_homework_2.Students.Student;
 
 public class StudentType2 implements StudyStrategy {
-    public static final int TYPES_OF_LESSONS = 2;
+    private static final int TYPES_OF_LESSONS = 2;
     private static final int STUDY_TIME_MULTIPLIER = 2;
     private static double allStudyTime;
     private static double partStudyTime;
