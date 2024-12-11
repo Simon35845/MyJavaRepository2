@@ -1,0 +1,2 @@
+CREATE DATABASE animals_in_shelters;
+USE animals_in_shelters;
