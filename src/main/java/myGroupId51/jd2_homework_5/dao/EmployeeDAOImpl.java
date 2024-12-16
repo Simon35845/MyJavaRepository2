@@ -1,5 +1,7 @@
 package myGroupId51.jd2_homework_5.dao;
 
+import myGroupId51.jd2_homework_5.Utils.JDBCResources;
+import myGroupId51.jd2_homework_5.Utils.SQLQuery;
 import myGroupId51.jd2_homework_5.dto.Employee;
 
 import java.sql.Connection;
@@ -11,69 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
-    private String url;
-    private String user;
-    private String password;
-
-    private static final String CREATE_TABLE_QUERY =
-            "CREATE TABLE IF NOT EXISTS employees (" +
-                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "first_name VARCHAR(50) NOT NULL, " +
-                    "last_name VARCHAR(50) NOT NULL, " +
-                    "email VARCHAR(100), " +
-                    "department VARCHAR(50), " +
-                    "salary DECIMAL(10,2), " +
-                    "hire_date DATE);";
-
-    private static final String INSERT_QUERY =
-            "INSERT INTO employees (" +
-                    "first_name, last_name, email, department, salary, hire_date) " +
-                    "VALUES (?, ?, ?, ?, ?, ?);";
-
-    private static final String UPDATE_QUERY =
-            "UPDATE employees " +
-                    "SET first_name = ?, last_name = ?, email = ?, " +
-                    "department = ?, salary = ?, hire_date = ? " +
-                    "WHERE id = ?;";
-
-    private static final String DELETE_QUERY =
-            "DELETE FROM employees " +
-                    "WHERE id = ?;";
-
-    private static final String SELECT_QUERY =
-            "SELECT * FROM employees " +
-                    "WHERE id = ?;";
-
-    private static final String SELECT_ALL_QUERY =
-            "SELECT * FROM employees;";
-
-    private static final String SELECT_BY_DEPARTMENT_QUERY =
-            "SELECT * FROM employees " +
-                    "WHERE department = ?;";
-
-    private static final String SELECT_BY_SALARY_QUERY =
-            "SELECT * FROM employees " +
-                    "WHERE salary > ?;";
-
-    private static final String SELECT_ALL_ORDER_BY_SALARY_QUERY =
-            "SELECT * FROM employees " +
-                    "ORDER BY salary;";
-
-    private static final String SELECT_ALL_ORDER_BY_LASTNAME_QUERY =
-            "SELECT * FROM employees " +
-                    "ORDER BY last_name;";
-
-    public EmployeeDAOImpl(String url, String user, String password) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-    }
-
-
     @Override
     public void createTable() {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TABLE_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.createTable())) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,8 +26,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void save(Employee employee) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.insert())) {
             setEmployeeParams(employee, preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -92,11 +37,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void update(Employee employee) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+    public void update(Employee employee, int id) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.update())) {
             setEmployeeParams(employee, preparedStatement);
-            preparedStatement.setInt(7, employee.getId());
+            preparedStatement.setInt(7, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,8 +51,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void delete(int id) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.delete())) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -116,10 +63,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public Employee find(int id) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.select())) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
+            System.out.println("Вывод сотрудника по id:");
             return getEmployeeParams(resultSet).get(0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,10 +78,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findAll() {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.selectAll())) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("Все сотрудники из отдела:");
+            System.out.println("\nВывод всех сотрудников:");
             return getEmployeeParams(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,11 +92,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findByDepartment(String department) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_DEPARTMENT_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.selectByDepartment())) {
             preparedStatement.setString(1, department);
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("Все сотрудники из отдела:");
+            System.out.println("Вывод всех сотрудников по отделу:");
             return getEmployeeParams(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -156,11 +107,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findBySalary(double salary) {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_SALARY_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.selectBySalary())) {
             preparedStatement.setDouble(1, salary);
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("Все сотрудники с зарплатой более:");
+            System.out.println("Вывод всех сотрудников по зарплате:");
             return getEmployeeParams(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -170,10 +122,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findAllOrderBySalary() {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDER_BY_SALARY_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.selectAllOrderBySalary())) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("Все сотрудники отсортированы по зарплате:");
+            System.out.println("\nВывод и сортировка всех сотрудников по зарплате:");
             return getEmployeeParams(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -183,10 +136,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> findAllOrderByLastName() {
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDER_BY_LASTNAME_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(
+                JDBCResources.getURL(), JDBCResources.getUser(), JDBCResources.getPassword());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQuery.selectAllOrderByLastname())) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("Все сотрудники отсортированы по фамилии:");
+            System.out.println("\nВывод и сортировка всех сотрудников по фамилии:");
             return getEmployeeParams(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
